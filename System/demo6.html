@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson6</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //生命周期函数:在某一时刻自动执行的函数
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world'
+            }
+        },
+        //实例创建之前
+        beforeCreate() {
+            console.log('beforeCreate')
+        },
+        //实例生成之后
+        created() {
+            console.log('created')
+        },
+        //在组件内容被渲染到页面之前
+        beforeMount() {
+            console.log(document.getElementById('root').innerHTML, 'beforeMount')
+            console.log('beforeMount')
+        },
+        //内容渲染到页面上之后
+        mounted() {
+            console.log('mounted')
+            console.log(document.getElementById('root').innerHTML, 'mounted')
+        },
+        //当data中的数据发生变化
+        beforeUpdate() {
+            console.log('beforeUpdate')
+            console.log(document.getElementById('root').innerHTML, 'beforeUpdate')
+        },
+        //当数据发生变化,页面重新渲染后
+        updated() {
+            console.log('updated')
+            console.log(document.getElementById('root').innerHTML, 'updated')
+        },
+        //Vue应用失效时
+        beforeUnmount() {
+            console.log('beforeUnmount')
+            console.log(document.getElementById('root').innerHTML, 'beforeUnmount')
+        },
+        //Vue应用失效时,且dom完全销毁之后
+        unmounted() {
+            console.log('unmounted')
+            console.log(document.getElementById('root').innerHTML, 'unmounted')
+        },
+        template: "<div>{{message}}</div>"
+    })
+    // vm 代表vue应用的根组件
+    const vm = app.mount('#root')
+    // vm.$data.message
+</script>
+
+</html>

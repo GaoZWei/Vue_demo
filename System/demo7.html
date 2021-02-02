@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson7</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //模板用法
+    const app = Vue.createApp({
+        data() {
+            return {
+                messageStrong: '<strong>hello world</strong>',
+                message: 'hello world',
+                disable: false,
+                show: false,
+                name: 'title',
+                event: 'click' //动态参数
+            }
+        },
+        methods: {
+            handleClick() {
+                alert('click')
+            },
+            handleClickPrevent(e) {
+                // e.preventDefault()
+            }
+        },
+        template: `
+        <div v-html="messageStrong"></div>
+
+        <div v-bind:title="message">hello world</div>
+        <div :title="message">hello world</div>
+        <div :[name]="message">hello world</div>
+
+
+        <input v-bind:disabled="disable"/>
+        <div>{{message+'a'+'这是js表达式,不可以语句(if)'}}</div>
+        <div v-once>{{message}}</div>
+        <div v-if="show">{{message}}</div>
+
+        <div v-on:click="handleClick">{{message}}</div>
+        <div @click="handleClick">{{message}}</div>
+        <div @[event]="handleClick">{{message}}</div>
+
+        <form action="https://www.baidu.com" @click.prevent="handleClickPrevent">
+        <button type="submit">提交</button>
+        </form>
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>
