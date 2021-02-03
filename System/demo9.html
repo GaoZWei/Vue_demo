@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson8</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+    <style>
+        .red {
+            color: red
+        }
+
+        .green {
+            color: green
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //样式
+    const app = Vue.createApp({
+        data() {
+            return {
+                classString: 'red',
+                classObj: {
+                    red: false,
+                    green: true
+                },
+                classArr: ['red', 'green', {
+                    brown: true
+                }],
+                //行内
+                styleString: 'color:yellow',
+                styleObj: { //推荐
+                    color: 'orange',
+                    background: 'yellow'
+                }
+            }
+        },
+        template: `
+        <div :class="classString">
+            hello world
+            <demo class='green'/>
+        </div>
+
+        <div style="color:yellow">yellow</div>
+        <div :style="styleString">yellow</div>
+        <div :style="styleObj">three</div>
+        `
+    })
+    app.component('demo', {
+        template: `
+        <div :class="$attrs.class">one</div>
+        <div>two</div>
+
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

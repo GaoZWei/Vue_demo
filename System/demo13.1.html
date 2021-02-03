@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson13</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //input textarea checkbox,radio select
+    //修饰符 .lazy .number .trim
+    const app = Vue.createApp({
+        data() {
+            return {
+                checkBoxItem: "checkBoxItem",
+                lazyItem: "lazyItem",
+                numItem: 'numItem',
+                trimItem: 'trimItem'
+            }
+        },
+        template: `
+         <div>
+         {{checkBoxItem}}
+         <input type="checkbox" v-model="checkBoxItem" true-value="hello" false-value="world"/>
+        </div>
+        <div>
+         {{lazyItem}}
+         <input v-model.lazy="lazyItem" />
+        </div> 
+        <div>
+         {{ typeof numItem}}
+         <input v-model.number="numItem" type="number" />
+        </div>
+        <div>
+         {{trimItem}}
+         <input v-model.trim="trimItem" />
+        </div>
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

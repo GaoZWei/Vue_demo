@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson8</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //data method computed watcher
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: 'hello world',
+                count: 2,
+                price: 5,
+                newTotal: 10
+            }
+        },
+        watch: {
+            //price发生变化时,函数会执行
+            price(current, prev) {
+                setTimeout(() => {
+                    console.log(current, prev)
+                    this.newTotal = current * this.count
+                }, 3000)
+            }
+        },
+        computed: {
+            //当 计算依赖内容 发生变更时,才会重新执行计算
+            total() {
+                return Date.now()
+                // return this.count * this.price
+            }
+        },
+        methods: {
+            handleClick() {
+                console.log('click', this)
+            },
+            formatString(string) {
+                return string.toUpperCase()
+            },
+            //只要页面重新渲染,才会重新计算
+            getTotal() {
+                // return this.count * this.price
+                return Date.now()
+            }
+
+        },
+        template: `
+        <div @click="handleClick">{{formatString(message)}}</div>
+        {{total}}
+        {{getTotal()}}
+        {{newTotals}}
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

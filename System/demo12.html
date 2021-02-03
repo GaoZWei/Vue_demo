@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson12</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //事件修饰符 stop prevent capture self once passive(配合scroll)
+    const app = Vue.createApp({
+        data() {
+            return {
+                counter: 0
+            }
+        }, 
+        methods: {
+            handleBtnClick(num, event) {
+                // console.log(event.target)
+                console.log(event)
+                this.counter += num
+            },
+            handleBtnClick1() {},
+            handleBtnClick2() {
+                this.counter += 1
+            },
+            handleDivClick(){
+                alert('div click')
+            }
+        },
+        template: `
+        <div>
+            {{counter}}
+            <button @click="handleBtnClick(2,$event)">传参btn</button><br/>
+            ---
+            <button @click="handleBtnClick(),handleBtnClick1()">两个函数btn</button><br/>   
+            ---
+            <div @click="handleDivClick">
+             <button @click.stop="handleBtnClick2">阻止冒泡btn</button>  
+            </div>     
+            ---
+            <div @click.self="handleDivClick">
+             <button @click="handleBtnClick2">self 的btn</button>  
+            </div>   
+       </div>
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

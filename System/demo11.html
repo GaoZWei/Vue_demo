@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson11</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //list
+    const app = Vue.createApp({
+        data() {
+            return {
+                listArr: ['gao', 'zw', 'student'],
+                listObject: {
+                    firstName: 'gao',
+                    lastName: 'zw',
+                    job: 'student'
+                }
+            }
+        },
+        methods: {
+            handleArrBtn() {
+                //使用数组的变更函数
+                // this.listArr.push('hello')
+                // this.listArr.pop()
+                // this.listArr.shift()
+                // this.listArr.unshift("hello")
+                // this.listArr.reverse()
+
+                // 直接替换数组
+                // this.listArr = ['bye', 'world']
+                // this.listArr = ['bye'].concat(['world'])
+                // this.listArr = ['bye', 'world'].filter(item => item === 'bye')
+
+                //直接更新数组的内容
+                // this.listArr[1]='hello'
+            },
+            handleObjBtn() {
+                //直接添加对象内容
+                this.listObject.age = '12'
+            }
+        },
+        template: `
+        <div v-for="(item,index) in listArr" :key="index">
+        {{item}}--{{index}}
+        </div>
+        ---
+        <template v-for="(value,key,index) in listObject"
+        :key="index"
+        >
+            <div v-if="key!=='lastName '">
+            {{value}}--  {{key}}--{{index}}
+            </div>
+        </template>
+        ---
+        <button @click="handleArrBtn">数组</button>
+        <button @click="handleObjBtn">对象</button>
+        ---
+
+        <div v-for="item in 10">{{item}}</div>
+        `
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>
