@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson18</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //用v-model简化,实现双向绑定
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 1,
+            }
+        },
+       
+        template: `
+        <div>
+            <counter v-model="count"/>
+            <counter v-model:app="count"/>
+        </div>
+        `
+    })
+    app.component('counter', {
+        props: ['modelValue','app'],// modelValue 固定的名字
+        methods: {
+            // handleClick() {
+            //     this.$emit('update:modelValue', this.modelValue + 3)// update:modelValue 固定的名字
+            // }
+            handleClick() {
+                this.$emit('update:app', this.app + 3)
+            }
+        },
+        template: `
+        <div @click="handleClick">{{modelValue}}</div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

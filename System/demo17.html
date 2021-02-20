@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson18</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //父子组件通信,双向绑定
+    const app = Vue.createApp({
+        data() {
+            return {
+                count: 1,
+            }
+        },
+        methods: {
+            // 第一种
+            handleAddOne() {
+                this.count += 1
+            },
+            //第二种
+            handleAdd(param) {
+                this.count += param
+            },
+            //第三种
+            handleAdd(count) {
+                this.count = count
+            }
+        },
+        template: `
+        <div>
+            <counter :count="count" @add-one="handleAddOne" @add="handleAdd"/>
+        </div>
+        `
+    })
+    app.component('counter', {
+        props: ['count'],
+        // emits: ['add'],//可以看见触发什么事件
+        emits: {
+            add: (count) => {
+                if (count > 0) {
+                    return true
+                }
+                return false
+            }
+        },
+        methods: {
+            //向外部触发事件
+            handleClick() {
+                // this.$emit('addOne') 
+                // this.$emit('add', 2)
+                this.$emit('add', this.count + 3)
+            }
+        },
+        template: `
+        <div @click="handleClick">{{count}}</div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
