@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson16</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //v-bind="params"
+    //:content="params.content" :a="params.a" :b="params.b" :c="params.c"
+    //属性传的时候使用content-abc 这种命名,接的时候使用 contentAbc 命名
+    //单向数据流
+    const app = Vue.createApp({
+        data() {
+            return {
+                params: {
+                    content: 123,
+                    a: 123,
+                    b: 456,
+                    c: 789
+                },
+                contentone: 1234
+            }
+        },
+        template: `
+        <div>
+            <test v-bind="params" :content-abc="contentone"/>
+        </div>
+        `
+    })
+    app.component('test', {
+        props: ['content', 'a', 'b', 'c','contentAbc'],
+        template: `<div>{{content}}-{{a}}-{{b}}-{{c}}-{{contentAbc}}</div>`
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

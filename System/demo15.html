@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson15</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                number: 123,
+                numfun: () => {
+                    alert(123)
+                }
+            }
+        },
+        template: `
+        <div>
+            <test v-bind:content="number" :contentfn="numfun"/>
+        </div>
+        `
+    })
+    app.component('test', {
+        //type: String Boolean Array Object Function Symbol
+        //require
+        //default
+        props: {
+            content: {
+                type: Number,
+                // required: true,
+                default: 789, //默认值
+                validator: function (value) {
+                    return value < 1000
+                }
+            }, //类型校验
+            contentfn: Function
+        },
+        methods: {
+            handleClick() {
+                alert(456)
+                this.contentfn()
+            }
+        },
+        template: `<div @click="this.handleClick">{{content}}</div>`
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

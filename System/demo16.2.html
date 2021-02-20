@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson16</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //Non-props属性
+    const app = Vue.createApp({
+        template: `
+        <div>
+            <counter msg="hello" msg1="hello1" style="color:red"/>
+        </div>
+        `
+    })
+    app.component('counter', {
+        // inheritAttrs: false,
+        mounted() {
+            console.log(this.$attrs)
+        },
+        template: `
+        <div v-bind:msg="$attrs.msg">Counter</div>
+        <div v-bind="$attrs">Counter</div>
+        <div v-bind:msg1="$attrs.msg1">Counter</div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson16</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //单向数据流
+    //子可以使用父的数据,但不能修改父的数据
+    const app = Vue.createApp({
+        data() {
+            return {
+                num: 1
+            }
+        },
+        template: `
+        <div>
+            <counter :count="num"/>
+        </div>
+        `
+    })
+    app.component('counter', {
+        props: ['count'],
+        data() {
+            return {
+                mycount: this.count
+            }
+        },
+        template: `<div @click="mycount+=1 ">{{mycount}}</div>`
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
