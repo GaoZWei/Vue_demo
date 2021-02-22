@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson20</title>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //slot
+    //slot中的数据作用域
+    //父模板调用的数据属性,使用的都是父模板里的数据
+    //子模板调用的数据属性,使用的都是子模板里的数据
+    const app = Vue.createApp({
+        data() {
+            return {
+                text: '提交'
+            }
+        },
+        template: `
+            <layout>
+                <template v-slot:header>   
+                    <div>header</div>
+                </template>
+                <template #footer>   
+                    <div>footer</div>
+                </template>
+            </layout>
+        `
+    })
+    app.component('layout', {
+        template: `
+        <div> 
+            <slot name="header"></slot>
+            <div>content</div>
+            <slot name="footer"></slot>
+        </div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
