@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson23</title>
+    <style>
+        .transition {
+            transition: 3s background-color ease;
+        }
+
+        .blue {
+            background-color: blue
+        }
+
+        .green {
+            background-color: green
+        }
+    </style>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    // 过渡 (直接用行内修改样式)
+    const app = Vue.createApp({
+        data() {
+            return {
+                styleObj: {
+                    background: 'blue',
+                }
+            }
+        },
+        methods: {
+            handleClick() {
+                if (this.styleObj.background === "blue") {
+                    this.styleObj.background = "green"
+                } else {
+                    this.styleObj.background = "blue"
+                }
+            }
+        },
+        template: `
+           <div class="transition" :style="styleObj">
+               hello world 
+           </div>
+           <button @click="handleClick">切换</button>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
