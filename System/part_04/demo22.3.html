@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson24</title>
+    <style>
+        @keyframes shake {
+            0% {
+                transform: translateX(-100px)
+            }
+
+            50% {
+                transform: translateX(-50px)
+            }
+
+            100% {
+                transform: translateX(50px)
+            }
+        }
+
+        .v-enter-from {
+            color: red
+        }
+
+        .v-enter-active {
+            animation: shake 10s;
+            transition: color 3s ease-in;
+        }
+
+        .v-leave-active {
+            color: red;
+            animation: shake 10s;
+            transition: all 3s ease-in
+        }
+    </style>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    // 单元素,单组件的入场出场动画
+    // <transition type="transition"> 以transition为准
+    //:duration="1000" 时间
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: false
+            }
+        },
+        methods: {
+            handleClick() {
+                this.show = !this.show
+            }
+        },
+        template: `
+        <div>
+            <transition :duration="{enter:1000,leave:3000}">
+                 <div v-if="show">
+                     hello world 
+                 </div>
+           </transition>
+           <button @click="handleClick">切换</button>
+        </div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

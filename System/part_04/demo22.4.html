@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson24</title>
+    <style>
+        @keyframes shake {
+            0% {
+                transform: translateX(-100px)
+            }
+
+            50% {
+                transform: translateX(-50px)
+            }
+
+            100% {
+                transform: translateX(50px)
+            }
+        }
+
+        .v-enter-from {
+            color: red
+        }
+
+        .v-enter-active {
+            animation: shake 10s;
+            transition: color 3s ease-in;
+        }
+
+        .v-leave-active {
+            color: red;
+            animation: shake 10s;
+            transition: all 3s ease-in
+        }
+    </style>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    // js做动画
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: false
+            }
+        },
+        methods: {
+            handleClick() {
+                this.show = !this.show
+            },
+            handleBeforeEnter(el) { //一个参数el
+                el.style.color = "red"
+            },
+            handleEnterActive(el, done) { //两个参数el done
+                const animation = setInterval(() => {
+                    const color = el.style.color
+                    if (color === "red") {
+                        el.style.color = "green"
+                    } else {
+                        el.style.color = "red"
+                    }
+                }, 1000)
+                setTimeout(() => {
+                    clearInterval(animation)
+                    done(); //告诉结束了
+                }, 5000)
+            },
+            handleEnterEnd() { //一个参数el
+                alert(123)
+            }
+        },
+        template: `
+        <div>
+            <transition 
+            :css="false"
+            @before-enter="handleBeforeEnter"
+            @enter="handleEnterActive"
+            @after-enter="handleEnterEnd"
+            >
+                 <div v-if="show">
+                     hello world 
+                 </div>
+           </transition>
+           <button @click="handleClick">切换</button>
+        </div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
