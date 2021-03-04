@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson28</title>
+
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //自定义的属性,组件中的属性优先级高于mixin属性的优先级
+    const MyMixin = {
+        number: 1,
+    }
+
+    const app = Vue.createApp({
+        number: 2,
+        mixins: [MyMixin], //局部mixin
+        template: `
+        <div>
+            <div>{{this.$options.number}} </div>
+        </div>
+        `
+    })
+
+    //修改优先级
+    app.config.optionMergeStrategies.number = (mixinVal, appValue) => {
+        return mixinVal || appValue
+    }
+
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

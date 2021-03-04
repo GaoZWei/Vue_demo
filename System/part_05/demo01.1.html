@@ -17,26 +17,7 @@
     <div id="root"></div>
 </body>
 <script>
-    // mixin 混入
-    //组件的 data和method 优先级高于mixin的 data和method 优先级
-    //生命周期函数先执行mixin里面的,再执行组件里面的
-    const MyMixin = {
-        data() {
-            return {
-                number: 2,
-                count: 333
-            }
-        },
-        created() {
-            console.log('mixin created')
-        },
-        methods: {
-            handleClick() {
-                console.log('mixin handleClick')
-            },
-        }
-    }
-  
+    //全局mixin
     const app = Vue.createApp({
         data() {
             return {
@@ -46,7 +27,6 @@
         created() {
             console.log('created')
         },
-        mixins: [MyMixin],//局部mixin
         methods: {
             handleClick() {
                 console.log('handleClick')
@@ -61,9 +41,27 @@
         </div>
         `
     })
-    app.component('child',{
-        mixins: [MyMixin],
-        template:`
+    app.mixin({ //全局mixin
+        data() {
+            return {
+                number: 2,
+                count: 333
+            }
+        },
+        created() {
+            console.log('mixin created')
+        },
+        methods: {
+            handleClick() {
+                console.log('mixin handleClick')
+            },
+        }
+    })
+
+
+
+    app.component('child', {
+        template: `
         <div>{{count}}</div>
         `
     })
