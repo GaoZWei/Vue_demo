@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson30</title>
+    <style>
+        .area {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 200px;
+            height: 300px;
+            background: #000;
+            transform: translate(-50%, -50%)
+        }
+
+        .mask {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: green;
+            opacity: 0.2;
+            color: #fff;
+            font-size: 100px;
+        }
+    </style>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //teleport传送门   将标签传送到body上,将组件的元素传送到其他位置
+    const app = Vue.createApp({
+        data() {
+            return {
+                show: false,
+                message: 'hello'
+            }
+        },
+        methods: {
+            handleBtnClick() {
+                this.show = !this.show
+            }
+        },
+        template: `
+        <div class="area">
+            <button @click="handleBtnClick"> 按钮 </button>
+                <teleport to="body">
+                     <div class="mask" v-show="show">{{message}}</div>
+                </teleport>
+        </div>
+        `
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

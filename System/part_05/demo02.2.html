@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson29</title>
+    <style>
+        .header {
+            position: absolute
+        }
+    </style>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                top: 100
+            }
+        },
+
+        template: `
+        <div>
+            <div v-pos="top" class="header">
+                <input />
+            </div>
+        </div>
+        `
+    })
+
+    //等价下面的语法
+    // app.directive('pos', (el, binding) => {
+    //     el.style.top = (binding.value + 'px')
+    // })
+
+    app.directive('pos', { //全局的自定义指令
+        mounted(el, binding) { //传参数
+            el.style.top = (binding.value + 'px')
+        },
+        updated(el, binding) {
+            el.style.top = (binding.value + 'px')
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

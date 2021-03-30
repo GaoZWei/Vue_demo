@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson30</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //render funtion
+    //template  ->render ->h ->虚拟DOM(JS对象)->真实DOM->展示到页面上
+    const app = Vue.createApp({
+        template: `
+          <mytitle :level="1">
+            hello gzw
+          </mytitle>
+        `
+    })
+
+    app.component('mytitle', {
+        props: ['level'],
+        //虚拟DOM    js对象   h函数 =>weex来写移动端代码
+        //<div> hello gzw</div>
+
+        // {
+        //     tagName:'h1',
+        //     text:'hello gzw',
+        //     attributes:{}
+        // }
+
+        render() {
+            const {
+                h
+            } = Vue;
+            return h('h' + this.level, {}, [
+                this.$slots.default(),//默认的插槽
+                h('h4', {}, "gao")
+            ]) 
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

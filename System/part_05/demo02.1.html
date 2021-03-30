@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson29</title>
+
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //生命周期
+    const app = Vue.createApp({
+        data() {
+            return {
+                hello: true
+            }
+        },
+        template: `
+        <div>
+            <div v-if="hello">
+                <input v-focus/>
+            </div>
+        </div>
+        `
+    })
+
+    app.directive('focus', { //全局的自定义指令
+        beforeMount(el) {
+            console.log('beforemount')
+        },
+        mounted(el) {
+            console.log('mounted')
+            el.focus()
+        },
+        beforeUpdate() {
+            console.log('beforeUpdate')
+        },
+        updated() {
+            console.log('updated')
+        },
+        beforeUnmount() {
+            console.log('beforeUnmount')
+        },
+        unmounted() {
+            console.log('unmounted')
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
