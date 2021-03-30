@@ -17,7 +17,8 @@
     <div id="root"></div>
 </body>
 <script>
-    //作用域插槽
+    //作用域插槽 子组件向上传item
+    //父组件调子组件,传slot进来,子组件通过属性方式把数据传给父组件,父组件再渲染
     const app = Vue.createApp({
         data() {
             return {
