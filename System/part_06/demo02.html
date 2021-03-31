@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson34</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //ref reacitve响应式的引用
+    //原理,通过proxy对数据进行封装,当数据变化时,触发模板等内容的更新
+    //ref处理基础类型的数据 
+    //reacitve处理非基础类型数据 ,对象数组
+    const app = Vue.createApp({
+        template: `
+           <div>
+                {{name}}
+                {{nameObj.name}}
+                {{nameObj1[0]}}
+           </div>
+        `,
+        setup(props, context) {
+            // const {
+            //     ref
+            // } = Vue
+            // //proxy,'dell'变成proxy({value:"dell"})这样的一个响应式的引用
+            // let name = ref('dell');
+            // setTimeout(() => {
+            //     name.value = "lee"
+            // }, 2000)
+            // return {
+            //     name
+            // }
+
+            const { reactive } = Vue
+            //proxy,'{name:'dell'变成proxy({name:"dell"})这样的一个响应式的引用
+            const nameObj = reactive({
+                name: 'gao'
+            })
+            const nameObj1 = reactive([123])
+            setTimeout(() => {
+                nameObj.name = "zw"
+                nameObj1[0] = 333
+            }, 2000)
+            return {
+                nameObj,
+                nameObj1
+            }
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

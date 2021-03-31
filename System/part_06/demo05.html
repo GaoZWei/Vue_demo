@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson38</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //computed 计算属性
+    const app = Vue.createApp({
+
+        setup() {
+            const {
+                ref,
+                reactive,
+                computed
+            } = Vue
+            const count = ref(0)
+            const countObj = reactive({
+                count: 0
+            })
+            const handleClick = () => {
+                count.value += 1
+                countObj.count += 1
+            }
+            // const countAddFive = computed(() => {
+            //     return count.value + 5
+            // })
+            let countAddFive = computed({
+                get: () => {
+                    // return count.value + 5
+                    return countObj.count+ 5
+                },
+                set: (param) => {
+                    // count.value = param - 5
+                    countObj.count= param - 5 
+                }
+            })
+            setTimeout(() => {
+                countAddFive.value = 100
+            }, 3000)
+            return {
+                count,
+                countObj,
+                countAddFive,
+                handleClick,
+            }
+        },
+        template: `
+           <div>
+                <span @click="handleClick">{{count}}</span>--- {{countAddFive}}
+                <span @click="handleClick">{{countObj.count}}</span>--- {{countAddFive}}
+           </div>
+        `,
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

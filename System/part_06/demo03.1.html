@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson36</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        template: `
+            <child>
+                parent
+            </child>
+     
+        `,
+    })
+    app.component('child', {
+        // template: `
+        //     <div>
+        //         child
+        //     </div>
+        // `,
+        setup(props, context) {
+            const { h } = Vue
+            const {
+                attrs, //父组件传递的 None-Props属性
+                slots, //父组件传递的插槽
+                emit
+            } = context
+            console.log(attrs)
+            console.log(slots.default())
+            return () => h('div', {}, slots.default()) //返回虚拟DOM
+        }
+    })
+    const vm = app.mount('#root')
+</script>
+
+</html>

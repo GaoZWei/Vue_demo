@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson34</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    const app = Vue.createApp({
+        template: `
+           <div>
+           {{name}}
+           </div>
+        `,
+        setup(props, context) {
+            const {
+                reactive,
+                toRefs
+            } = Vue
+            const nameObj = reactive({
+                name: 'gao',
+                age: 28
+            })
+            setTimeout(() => {
+                nameObj.name = "zw"
+            }, 2000)
+
+            //toRefs proxy({name:'dell',age:28}),
+            //{{name:proxy({value:'dell'})}}
+            //{{age:proxy({value:28})}}
+            const {
+                name
+            } = toRefs(nameObj) //解构 使用toRefs
+
+            return {
+                name
+            }
+        }
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>

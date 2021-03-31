@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson31</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //plugin 插件 ,也是通用性的功能封装起来
+    const myPlugin = {
+        install(app, options) {
+            app.provide('name', 'gaozw')
+            app.directive('focus', {
+                mounted(el) {
+                    el.focus()
+                }
+            })
+            app.mixin({
+                mounted() {
+                    console.log('mixin') //两个组件挂载都会执行mixin
+                }
+            })
+            app.config.globalProperties.$sayHello = "hello world"
+        }
+    }
+    const app = Vue.createApp({
+        template: `
+          <mytitle />`
+    })
+
+    app.component('mytitle', {
+        inject: ['name'],
+        mounted() {
+            console.log(this.$sayHello)
+        },
+        template: `
+        <div>
+                 {{name}}
+                 <input v-focus/>
+        </div>
+        `
+    })
+    app.use(myPlugin, {
+        name: 'gzw' //options显示
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
