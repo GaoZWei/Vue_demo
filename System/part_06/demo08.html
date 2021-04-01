@@ -1,0 +1,61 @@
+ <!DOCTYPE html>
+ <html lang="en">
+
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>lesson41</title>
+     <script crossorigin="anonymous"
+         integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+         src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+ </head>
+
+ <body>
+     <div id="root"></div>
+ </body>
+ <script>
+     //provide,inject
+     const app = Vue.createApp({
+         setup() {
+             const {
+                 provide,
+                 ref,
+                 readonly
+             } = Vue
+             const name = ref('dell')
+             provide('name', readonly(name)) //设置只读
+             provide('changeName', (value) => {
+                 name.value = value
+             })
+             return {}
+         },
+         template: `
+           <div>
+                <child/>
+           </div>
+        `
+     })
+     app.component('child', {
+         setup() {
+             const {
+                 inject
+             } = Vue
+             const name = inject('name', 'hello') //hello是默认值
+             const changeName = inject('changeName')
+             const handleClick = () => {
+                 //  name.value='231231'
+                 changeName('lee')
+             }
+             return {
+                 name,
+                 handleClick
+             }
+         },
+         template: '<div @click="handleClick">{{name}}</div>'
+     })
+
+     const vm = app.mount('#root')
+ </script>
+
+ </html>

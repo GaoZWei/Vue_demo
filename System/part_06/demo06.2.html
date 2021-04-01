@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lesson39</title>
+    <script crossorigin="anonymous"
+        integrity="sha512-0S1Z4iGuXAsDTvbchysUduts51Ef0IXJnNeNsa9D7W+cotLVA/TJaN9xnipOLL+0Y2lkH+7Xbd8qJB1RIvEleQ=="
+        src="https://lib.baomitu.com/vue/3.0.5/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script>
+    //watchEffect 侦听器 ,偏向于effect
+    const app = Vue.createApp({
+        setup() {
+            const {
+                ref,
+                reactive,
+                watch,
+                watchEffect,
+                toRefs
+            } = Vue
+            const name = ref("dell")
+            const ageObj = reactive({
+                age: 123,
+                englishName: 'eee'
+            })
+            // 具备一定的惰性 lazy
+            // 参数可以拿到原始和当前值
+            // 可以侦听多个数据的变化,用一个侦听器承载
+
+            //监听基础数据
+            watch(name, (currentValue, prevValue) => {
+                console.log(currentValue, prevValue)
+            })
+
+            //同时监听多个数据的变化
+            watch([() => ageObj.age, () => ageObj.englishName], ([currentValue, currentEng], [prevValue,
+                prevEng
+            ]) => {
+                console.log('watch', currentValue, prevValue, '----', currentEng, prevEng)
+            }, {
+                immediate: true //也可以实现非惰性的监听
+            })
+
+            //立即执行,没有惰性 immediate
+            //不需要传递需要侦听的内容,自动会感知代码依赖,不需要传递很多参数,只需要传递一个回调函数
+            //不可以拿到原始的值,只能获取当前的值
+            const stop = watchEffect(() => {
+                console.log(ageObj.age)
+                setTimeout(() => { //可以设置取消
+                    stop()
+                }, 5000)
+            })
+
+            const {
+                age,
+                englishName
+            } = toRefs(ageObj)
+            return {
+                name,
+                age,
+                englishName
+            }
+        },
+        template: `
+           <div>
+                <div>
+                    Name:<input v-model="name"/>
+                    Name is {{name}} <br/>
+                </div>
+                <div>
+                    Age:<input v-model="age"/>
+                    Age is {{age}}
+                </div>
+
+                <div>
+                    englishName:<input v-model="englishName"/>
+                    englishName is {{englishName}}
+                </div>
+           </div>
+        `,
+
+    })
+
+    const vm = app.mount('#root')
+</script>
+
+</html>
