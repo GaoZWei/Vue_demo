@@ -1,9 +1,14 @@
 # Vue_demo
 关于vue相关的学习demo
 
-1.Self_Study  自学
+1.Component  配套工具
+Component/demo_01  单页面应用
+Component/demo_02  Vue-Router
+Component/demo_03  Vuex
 
-2.System 系统学习
+2.Self_Study  自学
+
+3.System 系统学习
 
 System/part_01   大致了解Vue
 System/part_02   基础知识点
