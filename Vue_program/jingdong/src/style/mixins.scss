@@ -1,0 +1,5 @@
+@mixin ellipse {//文字自动展示...
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
