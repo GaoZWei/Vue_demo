@@ -1,42 +1,32 @@
 <template>
   <div class="nearby">
     <h3 class="nearby_title">附近店铺</h3>
-    <div class="nearby__item" v-for="item in nearbyList" :key="item.id">
-      <img :src="item.imgUrl" class="nearby__item__img" />
-      <div class="nearby__content">
-        <div class="nearby__content__title">{{item.title}}</div>
-        <div class="nearby__content__tags">
-          <span class="nearby__content__tag" v-for="(innerItem,innerindex) in item.tags" :key="innerindex">{{innerItem}}</span>
-        </div>
-        <p class="nearby__content__highlight">
-          {{item.desc}}
-        </p>
-      </div>
-    </div>
-
+    <ShopInfo v-for="item in nearbyList" :key="item._id" :item="item" />
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import { get } from "../../utils/request.js";
+import ShopInfo from "../../components/ShopInfo";
+const useNearByListEffect = () => {
+  const nearbyList = ref([]);
+  const getNearByList = async () => {
+    const result = await get("/api/shop/hot-list");
+    if (result.errno === 0 && result.data.length) {
+      nearbyList.value = result.data;
+    }
+  };
+  return { nearbyList, getNearByList };
+};
 export default {
   name: "Nearby",
+  components: {
+    ShopInfo
+  },
   setup() {
-    const nearbyList = [
-      {
-        id: 1,
-        title: "沃尔玛",
-        imgUrl: "http://www.dell-lee.com/imgs/vue3/near.png",
-        tags: ["月售1万＋", "起送0元", "基础运费5元"],
-        desc: "VIP尊享满89元减4元运费券(每月3张)"
-      },
-      {
-        id: 2,
-        title: "万达",
-        imgUrl: "http://www.dell-lee.com/imgs/vue3/near.png",
-        tags: ["月售1万＋", "起送5元", "基础运费5元"],
-        desc: "VIP尊享满89元减4元运费券(每月3张)"
-      }
-    ];
+    const { nearbyList, getNearByList } = useNearByListEffect();
+    getNearByList();
     return { nearbyList };
   }
 };
@@ -74,9 +64,9 @@ export default {
       line-height: 0.18rem;
       font-size: 0.13rem;
       color: $content-fontcolor;
-      &__tag {
-        margin-right: 0.16rem;
-      }
+    }
+    &__tag {
+      margin-right: 0.16rem;
     }
     &__highlight {
       margin: 0.08rem 0 0 0;
