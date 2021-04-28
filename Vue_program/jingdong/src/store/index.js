@@ -25,8 +25,8 @@ export default createStore({
     }
   },
   mutations: {
-    //实现加号
-    addItemToCart(state, payload) {
+    //实现购物车数量的变化
+    changeCartItemInfo(state, payload) {
       const {
         shopId,
         productId,
@@ -41,7 +41,10 @@ export default createStore({
         product = productInfo
         product.count = 0
       }
-      product.count += 1
+      product.count = product.count + payload.num
+      if (product.count < 0) {
+        product.count = 0
+      }
       //重新赋值
       shopInfo[productId] = product
       state.cartList[shopId] = shopInfo
