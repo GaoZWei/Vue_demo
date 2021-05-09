@@ -40,14 +40,47 @@ export default createStore({
       if (!product) {
         product = productInfo
         product.count = 0
+        product.check = 0
       }
       product.count = product.count + payload.num
+      if (payload.num > 0) {
+        product.check = true
+      }
       if (product.count < 0) {
         product.count = 0
       }
       //重新赋值
       shopInfo[productId] = product
       state.cartList[shopId] = shopInfo
+    },
+    //修改购物车选中状态
+    changeCartItemChecked(state, payload) {
+      const {
+        shopId,
+        productId
+      } = payload
+      const product = state.cartList[shopId][productId]
+      product.check = !product.check
+    },
+    //清空购物车
+    cleanCartProducts(state, payload) {
+      const {
+        shopId,
+      } = payload
+      state.cartList[shopId] = {}
+    },
+    //全选
+    setCartItemsChecked(state, payload) {
+      const {
+        shopId,
+      } = payload
+      const products = state.cartList[shopId]
+      if (products) {
+        for (let key in products) {
+          const product = products[key]
+          product.check = true;
+        }
+      }
     }
   },
   actions: {},

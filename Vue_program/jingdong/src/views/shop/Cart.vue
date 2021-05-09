@@ -1,8 +1,17 @@
 <template>
+  <!-- 蒙层 -->
+  <div class="mask" v-if="showCart" />
   <div class="cart">
-    <div class="product">
+    <div class="product" v-if="showCart">
+      <div class="product__header">
+        <div class="product__header__all" @click="()=>setCartItemsChecked(shopId)">
+          <span class="product__header__icon iconfont" v-html="allChecked ?'&#xe70f;':'&#xe6f7;'" /> 全选
+        </div>
+        <div class="product__header__clear" @click="()=>cleanCartProducts(shopId)">清空购物车</div>
+      </div>
       <template v-for="item in productList" :key="item._id">
         <div class="product__item" v-if="item.count>0">
+          <div class="product__item__checked iconfont" v-html="item.check ?'&#xe70f;':'&#xe6f7;'" @click="()=>changeCartItemChecked(shopId,item._id)" />
           <img class="product__item__img" :src="item.imgUrl" />
           <div class="product__item__detail">
             <h4 class="product__item__title">{{item.name}}</h4>
@@ -21,7 +30,7 @@
     </div>
     <div class="check">
       <div class="check__icon">
-        <img src="http://www.dell-lee.com/imgs/vue3/basket.png" class="check__icon__img" />
+        <img src="http://www.dell-lee.com/imgs/vue3/basket.png" class="check__icon__img" @click="handleCartShowChange" />
         <div class="check__icon__tag">{{total}}</div>
       </div>
       <div class="check__info">
@@ -34,13 +43,14 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { useCommonCartEffect } from "./commonCartEffect";
 
 //购物车逻辑
 const useCartEffect = shopId => {
+  const { changeCartItemInfo } = useCommonCartEffect();
   const store = useStore();
   const cartList = store.state.cartList;
   //总数
@@ -62,26 +72,92 @@ const useCartEffect = shopId => {
     if (productList) {
       for (let i in productList) {
         const product = productList[i];
-        count += product.count * product.price;
+        if (product.check) {
+          count += product.count * product.price;
+        }
       }
     }
     return count.toFixed(2);
+  });
+  //全选
+  const allChecked = computed(() => {
+    const productList = cartList[shopId];
+    let result = true;
+    if (productList) {
+      for (let i in productList) {
+        const product = productList[i];
+        if (product.count > 0 && !product.check) {
+          result = false;
+        }
+      }
+    }
+    return result;
   });
   //要展示的list
   const productList = computed(() => {
     const productList = cartList[shopId] || [];
     return productList;
   });
-  return { total, price, productList };
+  const changeCartItemChecked = (shopId, productId) => {
+    store.commit("changeCartItemChecked", {
+      shopId,
+      productId
+    });
+  };
+  const cleanCartProducts = shopId => {
+    store.commit("cleanCartProducts", {
+      shopId
+    });
+  };
+  const setCartItemsChecked = shopId => {
+    store.commit("setCartItemsChecked", {
+      shopId
+    });
+  };
+
+  return {
+    total,
+    price,
+    allChecked,
+    productList,
+    changeCartItemInfo,
+    changeCartItemChecked,
+    cleanCartProducts,
+    setCartItemsChecked
+  };
 };
 export default {
   name: "Cart",
   setup() {
     const route = useRoute();
     const shopId = route.params.id;
-    const { changeCartItemInfo } = useCommonCartEffect();
-    const { total, price, productList } = useCartEffect(shopId);
-    return { total, price, shopId, productList, changeCartItemInfo };
+    const showCart = ref(false); //显示购物车
+    const handleCartShowChange = () => {
+      showCart.value = !showCart.value;
+    }; //控制购物车显示
+    const {
+      total,
+      price,
+      allChecked,
+      productList,
+      changeCartItemInfo,
+      changeCartItemChecked,
+      cleanCartProducts,
+      setCartItemsChecked
+    } = useCartEffect(shopId);
+    return {
+      total,
+      price,
+      allChecked,
+      shopId,
+      productList,
+      changeCartItemInfo,
+      changeCartItemChecked,
+      cleanCartProducts,
+      setCartItemsChecked,
+      showCart,
+      handleCartShowChange
+    };
   }
 };
 </script>
@@ -89,22 +165,60 @@ export default {
 <style lang="scss" scoped>
 @import "../../style/viriables.scss";
 @import "../../style/mixins.scss";
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
 .cart {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2;
+  background: #fff;
 }
 .product {
   overflow-y: scroll;
   flex: 1;
   background: #fff;
+  &__header {
+    display: flex;
+    line-height: 0.52rem;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 0.14rem;
+    color: #333;
+    &__all {
+      width: 0.64rem;
+      margin-left: 0.16rem;
+    }
+    &__icon {
+      display: inline-block;
+      color: #0091ff;
+      font-size: 0.2rem;
+    }
+    &__clear {
+      flex: 1;
+      margin-right: 0.16rem;
+      text-align: right;
+    }
+  }
   &__item {
     position: relative;
     display: flex;
     padding: 0.12rem 0;
     margin: 0 0.16rem;
     border-bottom: 0.01rem solid $content-bgColor;
+    &__checked {
+      line-height: 0.5rem;
+      margin-right: 0.2rem;
+      color: #0091ff;
+      font-size: 0.2rem;
+    }
     &__detail {
       overflow: hidden;
     }
