@@ -1,17 +1,19 @@
 <template>
   <!-- 蒙层 -->
-  <div class="mask" v-if="showCart" />
+  <div class="mask" v-if="showCart && caculations.total>0" @click="handleCartShowChange" />
   <div class="cart">
-    <div class="product" v-if="showCart">
+    <div class="product" v-if="showCart && caculations.total>0">
       <div class="product__header">
         <div class="product__header__all" @click="()=>setCartItemsChecked(shopId)">
-          <span class="product__header__icon iconfont" v-html="allChecked ?'&#xe70f;':'&#xe6f7;'" /> 全选
+          <span class="product__header__icon iconfont" v-html="caculations.allChecked ?'&#xe70f;':'&#xe619;'" /> 全选
         </div>
-        <div class="product__header__clear" @click="()=>cleanCartProducts(shopId)">清空购物车</div>
+        <div class="product__header__clear">
+          <span class="product__header__clear__btn" @click="()=>cleanCartProducts(shopId)">清空购物车</span>
+        </div>
       </div>
       <template v-for="item in productList" :key="item._id">
         <div class="product__item" v-if="item.count>0">
-          <div class="product__item__checked iconfont" v-html="item.check ?'&#xe70f;':'&#xe6f7;'" @click="()=>changeCartItemChecked(shopId,item._id)" />
+          <div class="product__item__checked iconfont" v-html="item.check ?'&#xe70f;':'&#xe619;'" @click="()=>changeCartItemChecked(shopId,item._id)" />
           <img class="product__item__img" :src="item.imgUrl" />
           <div class="product__item__detail">
             <h4 class="product__item__title">{{item.name}}</h4>
@@ -31,13 +33,17 @@
     <div class="check">
       <div class="check__icon">
         <img src="http://www.dell-lee.com/imgs/vue3/basket.png" class="check__icon__img" @click="handleCartShowChange" />
-        <div class="check__icon__tag">{{total}}</div>
+        <div class="check__icon__tag">{{caculations.total}}</div>
       </div>
       <div class="check__info">
         总计：
-        <span class="check__info__price">&yen; {{price}}</span>
+        <span class="check__info__price">&yen; {{caculations.price}}</span>
       </div>
-      <div class="check__btn">去结算</div>
+      <div class="check__btn">
+        <router-link :to="{name:'Home'}">
+          去结算
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -50,52 +56,76 @@ import { useCommonCartEffect } from "./commonCartEffect";
 
 //购物车逻辑
 const useCartEffect = shopId => {
-  const { changeCartItemInfo } = useCommonCartEffect();
+  const { cartList, changeCartItemInfo } = useCommonCartEffect();
   const store = useStore();
-  const cartList = store.state.cartList;
-  //总数
-  const total = computed(() => {
-    const productList = cartList[shopId];
-    let count = 0;
+  // const cartList = store.state.cartList;
+
+  const caculations = computed(() => {
+    const productList = cartList[shopId]?.productList;
+    const result = {
+      total: 0,
+      price: 0,
+      allChecked: true
+    };
     if (productList) {
       for (let i in productList) {
         const product = productList[i];
-        count += product.count;
-      }
-    }
-    return count;
-  });
-  //价格
-  const price = computed(() => {
-    const productList = cartList[shopId];
-    let count = 0;
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i];
+        result.total += product.count;
         if (product.check) {
-          count += product.count * product.price;
+          result.price += product.count * product.price;
         }
-      }
-    }
-    return count.toFixed(2);
-  });
-  //全选
-  const allChecked = computed(() => {
-    const productList = cartList[shopId];
-    let result = true;
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i];
         if (product.count > 0 && !product.check) {
-          result = false;
+          result.allChecked = false;
         }
       }
     }
+    result.price = result.price.toFixed(2);
     return result;
   });
+
+  //总数
+  // const total = computed(() => {
+  //   const productList = cartList[shopId]?.productList;
+  //   let count = 0;
+  //   if (productList) {
+  //     for (let i in productList) {
+  //       const product = productList[i];
+  //       count += product.count;
+  //     }
+  //   }
+  //   return count;
+  // });
+  //价格
+  // const price = computed(() => {
+  //   const productList = cartList[shopId]?.productList;
+  //   let count = 0;
+  //   if (productList) {
+  //     for (let i in productList) {
+  //       const product = productList[i];
+  //       if (product.check) {
+  //         count += product.count * product.price;
+  //       }
+  //     }
+  //   }
+  //   return count.toFixed(2);
+  // });
+  //全选
+  // const allChecked = computed(() => {
+  //   const productList = cartList[shopId].productList;
+  //   let result = true;
+  //   if (productList) {
+  //     for (let i in productList) {
+  //       const product = productList[i];
+  //       if (product.count > 0 && !product.check) {
+  //         result = false;
+  //       }
+  //     }
+  //   }
+  //   return result;
+  // });
   //要展示的list
   const productList = computed(() => {
-    const productList = cartList[shopId] || [];
+    const productList = cartList[shopId].productList || [];
     return productList;
   });
   const changeCartItemChecked = (shopId, productId) => {
@@ -116,9 +146,10 @@ const useCartEffect = shopId => {
   };
 
   return {
-    total,
-    price,
-    allChecked,
+    // total,
+    // price,
+    // allChecked,
+    caculations,
     productList,
     changeCartItemInfo,
     changeCartItemChecked,
@@ -126,29 +157,37 @@ const useCartEffect = shopId => {
     setCartItemsChecked
   };
 };
+
+//展示隐藏购物车逻辑
+const toggleCartEffect = () => {
+  const showCart = ref(false); //显示购物车
+  const handleCartShowChange = () => {
+    showCart.value = !showCart.value;
+  }; //控制购物车显示
+  return { showCart, handleCartShowChange };
+};
 export default {
   name: "Cart",
   setup() {
     const route = useRoute();
     const shopId = route.params.id;
-    const showCart = ref(false); //显示购物车
-    const handleCartShowChange = () => {
-      showCart.value = !showCart.value;
-    }; //控制购物车显示
     const {
-      total,
-      price,
-      allChecked,
+      // total,
+      // price,
+      // allChecked,
+      caculations,
       productList,
       changeCartItemInfo,
       changeCartItemChecked,
       cleanCartProducts,
       setCartItemsChecked
     } = useCartEffect(shopId);
+    const { showCart, handleCartShowChange } = toggleCartEffect();
     return {
-      total,
-      price,
-      allChecked,
+      // total,
+      // price,
+      // allChecked,
+      caculations,
       shopId,
       productList,
       changeCartItemInfo,
@@ -180,24 +219,26 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 2;
-  background: #fff;
+  background: $bgColor;
 }
 .product {
   overflow-y: scroll;
   flex: 1;
-  background: #fff;
+  background: $bgColor;
   &__header {
     display: flex;
     line-height: 0.52rem;
     border-bottom: 1px solid #f1f1f1;
     font-size: 0.14rem;
-    color: #333;
+    color: $content-fontcolor;
     &__all {
       width: 0.64rem;
       margin-left: 0.16rem;
     }
     &__icon {
       display: inline-block;
+      margin-right: 0.1rem;
+      vertical-align: top;
       color: #0091ff;
       font-size: 0.2rem;
     }
@@ -205,6 +246,9 @@ export default {
       flex: 1;
       margin-right: 0.16rem;
       text-align: right;
+      &__btn {
+        display: inline-block;
+      }
     }
   }
   &__item {
@@ -253,7 +297,7 @@ export default {
     .product__number {
       position: absolute;
       right: 0;
-      bottom: 0.12rem;
+      bottom: 0.26rem;
       &__minus,
       &__plus {
         display: inline-block;
@@ -304,7 +348,7 @@ export default {
       border-radius: 0.1rem;
       font-size: 0.12rem;
       text-align: center;
-      color: #fff;
+      color: $bgColor;
       transform-origin: left center;
     }
   }
@@ -322,8 +366,11 @@ export default {
     width: 0.98rem;
     background-color: #4fb0f9;
     text-align: center;
-    color: #fff;
     font-size: 0.14rem;
+    a {
+      color: $bgColor;
+      text-decoration: none;
+    }
   }
 }
 </style>
