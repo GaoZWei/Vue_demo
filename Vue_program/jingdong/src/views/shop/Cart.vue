@@ -40,7 +40,7 @@
         <span class="check__info__price">&yen; {{caculations.price}}</span>
       </div>
       <div class="check__btn">
-        <router-link :to="{name:'Home'}">
+        <router-link :to="{path:`/orderConfirmation/${shopId}`}">
           去结算
         </router-link>
       </div>
@@ -49,85 +49,17 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { useCommonCartEffect } from "./commonCartEffect";
+import { useCommonCartEffect } from "../../effects/cartEffects.js";
 
 //购物车逻辑
 const useCartEffect = shopId => {
-  const { cartList, changeCartItemInfo } = useCommonCartEffect();
+  const { productList, caculations, changeCartItemInfo } = useCommonCartEffect(
+    shopId
+  );
   const store = useStore();
-  // const cartList = store.state.cartList;
-
-  const caculations = computed(() => {
-    const productList = cartList[shopId]?.productList;
-    const result = {
-      total: 0,
-      price: 0,
-      allChecked: true
-    };
-    if (productList) {
-      for (let i in productList) {
-        const product = productList[i];
-        result.total += product.count;
-        if (product.check) {
-          result.price += product.count * product.price;
-        }
-        if (product.count > 0 && !product.check) {
-          result.allChecked = false;
-        }
-      }
-    }
-    result.price = result.price.toFixed(2);
-    return result;
-  });
-
-  //总数
-  // const total = computed(() => {
-  //   const productList = cartList[shopId]?.productList;
-  //   let count = 0;
-  //   if (productList) {
-  //     for (let i in productList) {
-  //       const product = productList[i];
-  //       count += product.count;
-  //     }
-  //   }
-  //   return count;
-  // });
-  //价格
-  // const price = computed(() => {
-  //   const productList = cartList[shopId]?.productList;
-  //   let count = 0;
-  //   if (productList) {
-  //     for (let i in productList) {
-  //       const product = productList[i];
-  //       if (product.check) {
-  //         count += product.count * product.price;
-  //       }
-  //     }
-  //   }
-  //   return count.toFixed(2);
-  // });
-  //全选
-  // const allChecked = computed(() => {
-  //   const productList = cartList[shopId].productList;
-  //   let result = true;
-  //   if (productList) {
-  //     for (let i in productList) {
-  //       const product = productList[i];
-  //       if (product.count > 0 && !product.check) {
-  //         result = false;
-  //       }
-  //     }
-  //   }
-  //   return result;
-  // });
-  //要展示的list
-  const productList = computed(() => {
-    const productList = cartList[shopId].productList || [];
-    return productList;
-  });
   const changeCartItemChecked = (shopId, productId) => {
     store.commit("changeCartItemChecked", {
       shopId,
@@ -146,11 +78,8 @@ const useCartEffect = shopId => {
   };
 
   return {
-    // total,
-    // price,
-    // allChecked,
-    caculations,
     productList,
+    caculations,
     changeCartItemInfo,
     changeCartItemChecked,
     cleanCartProducts,
