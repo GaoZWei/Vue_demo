@@ -10,7 +10,11 @@ const setLocalCartList = (state) => {
   localStorage.cartList = cartListString
 }
 const getLocalCartList = () => {
-  return JSON.parse(localStorage.cartList) || {}
+  try {
+    return JSON.parse(localStorage.cartList)
+  } catch (e) {
+    return {}
+  }
 }
 export default createStore({
   state: {
@@ -111,6 +115,10 @@ export default createStore({
         }
       }
       setLocalCartList(state)
+    },
+    //提交订单后清空购物车数据
+    clearCartData(state, shopId) {
+      state.cartList[shopId].productList = {}
     }
   },
   actions: {},

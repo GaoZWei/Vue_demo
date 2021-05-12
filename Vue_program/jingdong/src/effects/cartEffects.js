@@ -19,11 +19,18 @@ export const useCommonCartEffect = (shopId) => {
   };
   //要展示的list
   const productList = computed(() => {
-    const productList = cartList[shopId].productList || [];
-    return productList;
+    const productList = cartList[shopId].productList || {};
+    const notEmptyProductList = {}//使数量为0的不显示,不包含在请求中
+    for (let i in productList) {
+      const product = productList[i]
+      if (product.count > 0) {
+        notEmptyProductList[i] = product
+      }
+    }
+    return notEmptyProductList;
   });
   const shopName = computed(() => {
-    const shopName = cartList[shopId].shopName || [];
+    const shopName = cartList[shopId].shopName || '';
     return shopName;
   });
   const caculations = computed(() => {
