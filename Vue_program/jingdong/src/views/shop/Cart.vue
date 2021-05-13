@@ -22,9 +22,9 @@
           </p>
         </div>
         <div class="product__number">
-          <span class="product__number__minus" @click="()=>changeCartItemInfo(shopId,item._id,item,-1)">-</span>
+          <span class="product__number__minus iconfont" @click="()=>changeCartItemInfo(shopId,item._id,item,-1)">&#xe90a;</span>
           {{item.count||0}}
-          <span class="product__number__plus" @click="()=>changeCartItemInfo(shopId,item._id,item,1)">+</span>
+          <span class="product__number__plus iconfont" @click="()=>changeCartItemInfo(shopId,item._id,item,1)">&#xe606;</span>
         </div>
       </div>
     </div>
@@ -155,7 +155,7 @@ export default {
   &__header {
     display: flex;
     line-height: 0.52rem;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 0.01rem solid #f1f1f1;
     font-size: 0.14rem;
     color: $content-fontcolor;
     &__all {
@@ -225,24 +225,26 @@ export default {
       position: absolute;
       right: 0;
       bottom: 0.26rem;
-      &__minus,
-      &__plus {
-        display: inline-block;
-        width: 0.2rem;
-        height: 0.2rem;
-        line-height: 0.16rem;
-        border-radius: 50%;
-        font-size: 0.2rem;
-        text-align: center;
-      }
+      // &__minus,
+      // &__plus {
+      //   display: inline-block;
+      //   width: 0.2rem;
+      //   height: 0.2rem;
+      //   line-height: 0.16rem;
+      //   border-radius: 50%;
+      //   font-size: 0.2rem;
+      //   text-align: center;
+      // }
       &__minus {
-        border: 0.01rem solid $medium-fontColor;
+        position: relative;
+        top: 0.02rem;
         color: $medium-fontColor;
         margin-right: 0.05rem;
       }
       &__plus {
-        background: $btn-bgColor;
-        color: $bgColor;
+        position: relative;
+        top: 0.02rem;
+        color: $btn-bgColor;
         margin-left: 0.05rem;
       }
     }
